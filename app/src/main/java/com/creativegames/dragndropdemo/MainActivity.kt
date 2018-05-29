@@ -4,12 +4,14 @@ import android.app.Activity
 import android.content.ClipData
 import android.graphics.PointF
 import android.os.Bundle
-import android.view.*
+import android.view.DragEvent
+import android.view.MotionEvent
+import android.view.View
 import android.view.View.OnDragListener
 import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
-import android.view.animation.Animation.RELATIVE_TO_PARENT
 import android.view.animation.TranslateAnimation
 import android.widget.FrameLayout
 import android.widget.ImageView
@@ -102,7 +104,7 @@ class MainActivity : Activity() {
 
     private fun validTarget(view: View, x: Float, y: Float): PointF? {
         if (x > 100 && x < 500 && y > 100 && y < 500) {
-            return PointF(500f - view.width  / 2, 500f - view.height / 2)
+            return PointF(500f - view.width / 2, 500f - view.height / 2)
         }
         return null
     }

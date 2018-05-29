@@ -1,34 +1,40 @@
 package com.creativegames.dragndropdemo
 
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
+
 
 class BoardView : View {
 
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
-        commonInit()
+        commonInit(attrs)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        commonInit()
+        commonInit(attrs)
     }
 
     private val mPaint = Paint()
 
-    private fun commonInit() {
+    private fun commonInit(attrs: AttributeSet?) {
+        val attributes = context.theme.obtainStyledAttributes(
+                attrs,
+                R.styleable.BoardViewStyleable,
+                0, 0
+        )
 
-//        mPaint.isAntiAlias = true
-//        mPaint.isDither = true
-//        mPaint.style = Paint.Style.STROKE
-//        mPaint.strokeJoin = Paint.Join.ROUND
-//        mPaint.strokeCap = Paint.Cap.ROUND
+        try {
+            mPaint.color = attributes.getColor(R.styleable.BoardViewStyleable_lines_color, -0x1000000)
+        } finally {
+            // release the TypedArray so that it can be reused.
+            attributes.recycle()
+        }
+
+
         mPaint.strokeWidth = 4f
-//        mPaint.alpha = 255
-        mPaint.color = Color.GRAY
-//        mPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DARKEN)
-
     }
 
     override fun onDraw(canvas: Canvas?) {
