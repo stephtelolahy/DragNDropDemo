@@ -38,8 +38,6 @@ class MainActivity : Activity() {
         val y = imageView.y
         val targetX = 300f
         val targetY = 300f
-
-        //val translateAnimation = TranslateAnimation(0.0f, (targetX - x), 0.0f, (targetY - y))
         val translateAnimation = TranslateAnimation(0.0f, (targetX - x), 0.0f, (targetY - y))
         translateAnimation.duration = 2000
         translateAnimation.interpolator = AccelerateDecelerateInterpolator()
