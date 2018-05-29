@@ -34,6 +34,10 @@ class MainActivity : Activity() {
         contentView.setOnDragListener(DragListener())
 
         // Restrict drop area
+        val targetX = contentView.width / 2
+        val targetY = contentView.height / 2
+
+
 
 
         // Animate translation
