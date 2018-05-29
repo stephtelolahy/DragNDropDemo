@@ -8,10 +8,12 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnDragListener
 import android.view.View.OnTouchListener
+import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import kotlinx.android.synthetic.main.activity_main.*
+import android.widget.FrameLayout
+import android.widget.ImageView
 
 
 class MainActivity : Activity() {
@@ -19,21 +21,28 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val contentView = findViewById<View>(android.R.id.content) as FrameLayout
+
+        val imageView = ImageView(this)
+        imageView.setImageResource(R.mipmap.ic_launcher)
+        imageView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+
+        contentView.addView(imageView)
 
         // Drag and drop
-        myimage1.setOnTouchListener(TouchListener())
-        findViewById<View>(android.R.id.content).setOnDragListener(DragListener())
+        imageView.setOnTouchListener(TouchListener())
+        contentView.setOnDragListener(DragListener())
 
         // Restrict drop area
 
 
         // Animate translation
-        val x = myimage1.x
-        val y = myimage1.y
+        val x = imageView.x
+        val y = imageView.y
         val translateAnimation = TranslateAnimation(0.0f, 100.0f, 0.0f, 300.0f)
         translateAnimation.duration = 2000
         translateAnimation.interpolator = AccelerateDecelerateInterpolator()
-        translateAnimation.setAnimationListener(object: Animation.AnimationListener{
+        translateAnimation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
             }
 
@@ -41,11 +50,11 @@ class MainActivity : Activity() {
             }
 
             override fun onAnimationEnd(animation: Animation?) {
-                myimage1.x = x + 100f
-                myimage1.y = y + 300f
+                imageView.x = x + 100f
+                imageView.y = y + 300f
             }
         })
-        myimage1.startAnimation(translateAnimation)
+        imageView.startAnimation(translateAnimation)
 
     }
 
