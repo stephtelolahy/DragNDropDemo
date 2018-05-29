@@ -3,6 +3,7 @@ package com.creativegames.dragndropdemo
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Point
 import android.util.AttributeSet
 import android.view.View
 
@@ -18,7 +19,8 @@ class BoardView : View {
     }
 
     private val mPaint = Paint()
-
+    private lateinit var mPawnLocations: Array<PawnLocation>
+ 
     private fun commonInit(attrs: AttributeSet?) {
         val attributes = context.theme.obtainStyledAttributes(
                 attrs,
@@ -33,8 +35,19 @@ class BoardView : View {
             attributes.recycle()
         }
 
-
         mPaint.strokeWidth = 4f
+
+        val offset = Point(100, 100)
+        val sideWidth = 100
+
+
+
+        val row1: Array<String> = arrayOf("Hi", "are", "you")
+        val row2: Array<String> = arrayOf("Hi", "are", "you")
+        val grid: Array<Array<String>> = arrayOf(row1, row2)
+
+        val element = grid[0][0]
+
     }
 
     override fun onDraw(canvas: Canvas?) {
