@@ -8,25 +8,23 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.View.OnDragListener
 import android.view.View.OnTouchListener
-import android.view.ViewGroup
-import android.widget.ImageView
 import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : Activity() {
 
+    private lateinit var pawn: Pawn
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val pawn = ImageView(this)
-        pawn.setImageResource(R.mipmap.ic_launcher)
-        pawn.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        pawn = Pawn(this)
         main_view.addView(pawn)
 
-        // Drag and drop
         pawn.setOnTouchListener(TouchListener())
         main_view.setOnDragListener(DragListener())
+
 
         // Animate translation
         /*
@@ -67,30 +65,21 @@ class MainActivity : Activity() {
         }
     }
 
-    private var oldX = 0f
-    private var oldY = 0f
-
     private inner class DragListener : OnDragListener {
         override fun onDrag(v: View, event: DragEvent): Boolean {
+            val pawn = event.localState as Pawn
             when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> {
-                    val view = event.localState as View
-                    oldX = view.x
-                    oldY = view.y
-                }
+                DragEvent.ACTION_DRAG_STARTED -> pawn.oldPosition = pawn.position()
                 DragEvent.ACTION_DROP -> {
-                    val view = event.localState as View
-                    val target = board_view.validTarget(view, event.x, event.y)
+                    val target = board_view.validTarget(pawn, event.x, event.y)
                     if (target != null) {
-                        view.x = target.x
-                        view.y = target.y
+                        pawn.setPosition(target)
                     } else {
-                        view.x = oldX
-                        view.y = oldY
+                        pawn.setPosition(pawn.oldPosition)
                     }
-                    view.visibility = View.VISIBLE
+                    pawn.visibility = View.VISIBLE
                 }
-            } // do nothing
+            }
             return true
         }
     }
