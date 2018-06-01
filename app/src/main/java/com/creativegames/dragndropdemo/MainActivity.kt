@@ -13,16 +13,15 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : Activity() {
 
-    private lateinit var pawn: Pawn
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        pawn = Pawn(this)
-        main_view.addView(pawn)
-
-        pawn.setOnTouchListener(TouchListener())
+        for (i in 1..1) {
+            val pawn = Pawn(this)
+            main_view.addView(pawn)
+            pawn.setOnTouchListener(TouchListener())
+        }
         main_view.setOnDragListener(DragListener())
 
 
@@ -57,7 +56,6 @@ class MainActivity : Activity() {
                 val data = ClipData.newPlainText("", "")
                 val shadowBuilder = View.DragShadowBuilder(view)
                 view.startDrag(data, shadowBuilder, view, 0)
-                view.visibility = View.INVISIBLE
                 true
             } else {
                 false
@@ -69,13 +67,13 @@ class MainActivity : Activity() {
         override fun onDrag(v: View, event: DragEvent): Boolean {
             val pawn = event.localState as Pawn
             when (event.action) {
-                DragEvent.ACTION_DRAG_STARTED -> pawn.oldPosition = pawn.position()
+                DragEvent.ACTION_DRAG_STARTED -> pawn.startDragging()
                 DragEvent.ACTION_DROP -> {
                     val target = board_view.validTarget(pawn, event.x, event.y)
                     if (target != null) {
-                        pawn.setPosition(target)
+                        pawn.dropAt(target)
                     } else {
-                        pawn.setPosition(pawn.oldPosition)
+                        pawn.putBack()
                     }
                     pawn.visibility = View.VISIBLE
                 }
