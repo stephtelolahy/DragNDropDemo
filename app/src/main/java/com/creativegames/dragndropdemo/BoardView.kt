@@ -3,10 +3,10 @@ package com.creativegames.dragndropdemo
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Point
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.min
 
 
 class BoardView : View {
@@ -45,26 +45,39 @@ class BoardView : View {
 
         mPaint.strokeWidth = 4f
 
-        val offset = Point(100, 100)
-        val sideWidth = 100
-
-
+        /*
         val row1: Array<String> = arrayOf("Hi", "are", "you")
         val row2: Array<String> = arrayOf("Hi", "are", "you")
         val grid: Array<Array<String>> = arrayOf(row1, row2)
-
         val element = grid[0][0]
-
+        */
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas?.drawLine(100f, 100f, 500f, 100f, mPaint)
-        canvas?.drawLine(500f, 100f, 500f, 500f, mPaint)
-        canvas?.drawLine(500f, 500f, 100f, 500f, mPaint)
-        canvas?.drawLine(100f, 500f, 100f, 100f, mPaint)
-        canvas?.drawLine(100f, 100f, 500f, 500f, mPaint)
-        canvas?.drawLine(500f, 100f, 100f, 500f, mPaint)
+        val margin = 100f
+        val W = min(width, height) - 2 * margin
+        val Ox = margin
+        val Oy = margin
+
+        val A = PointF(Ox, Oy)
+        val B = PointF(Ox + W, Oy)
+        val C = PointF(Ox, Oy + W)
+        val D = PointF(Ox + W, Oy + W)
+
+        //A  B
+        //C  D
+
+        canvas?.drawLine(A, B, mPaint)
+        canvas?.drawLine(B, D, mPaint)
+        canvas?.drawLine(D, C, mPaint)
+        canvas?.drawLine(C, A, mPaint)
+        canvas?.drawLine(A, D, mPaint)
+        canvas?.drawLine(B, C, mPaint)
     }
+}
+
+fun Canvas.drawLine(p1: PointF, p2: PointF, paint: Paint) {
+    drawLine(p1.x, p1.y, p2.x, p2.y, paint)
 }
