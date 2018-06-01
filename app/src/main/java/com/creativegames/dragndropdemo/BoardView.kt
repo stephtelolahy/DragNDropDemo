@@ -13,7 +13,7 @@ import kotlin.math.min
 class BoardView : View {
 
     private val mPaint = Paint()
-    private var P = ArrayList<PointF>()
+    var P = ArrayList<PointF>()
 
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
         commonInit(attrs)
@@ -43,25 +43,40 @@ class BoardView : View {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         val margin = 100f
-        val W = min(w, h) - 2 * margin
-        val Ox = margin
-        val Oy = margin
+        val S = min(w, h) - 2 * margin
+        val C = S / 4
+        val Ox = (w - S) / 2
+        val Oy = (h - S) / 2
         P.clear()
-        P.add(PointF(Ox, Oy))
-        P.add(PointF(Ox + W, Oy))
-        P.add(PointF(Ox, Oy + W))
-        P.add(PointF(Ox + W, Oy + W))
+
+        for (li in 0..4)
+            for (co in 0..4) {
+                P.add(PointF(Ox + co * C, Oy + li * C))
+            }
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        canvas?.drawLine(P[0], P[1], mPaint)
-        canvas?.drawLine(P[1], P[3], mPaint)
-        canvas?.drawLine(P[3], P[2], mPaint)
-        canvas?.drawLine(P[2], P[0], mPaint)
-        canvas?.drawLine(P[0], P[3], mPaint)
-        canvas?.drawLine(P[1], P[2], mPaint)
+        canvas?.drawLine(P[0], P[4], mPaint)
+        canvas?.drawLine(P[5], P[9], mPaint)
+        canvas?.drawLine(P[10], P[14], mPaint)
+        canvas?.drawLine(P[15], P[19], mPaint)
+        canvas?.drawLine(P[20], P[24], mPaint)
+
+        canvas?.drawLine(P[0], P[20], mPaint)
+        canvas?.drawLine(P[1], P[21], mPaint)
+        canvas?.drawLine(P[2], P[22], mPaint)
+        canvas?.drawLine(P[3], P[23], mPaint)
+        canvas?.drawLine(P[4], P[24], mPaint)
+
+        canvas?.drawLine(P[0], P[24], mPaint)
+        canvas?.drawLine(P[10], P[22], mPaint)
+        canvas?.drawLine(P[2], P[14], mPaint)
+
+        canvas?.drawLine(P[4], P[20], mPaint)
+        canvas?.drawLine(P[2], P[10], mPaint)
+        canvas?.drawLine(P[14], P[22], mPaint)
     }
 
     fun validTarget(view: View, x: Float, y: Float): PointF? {
