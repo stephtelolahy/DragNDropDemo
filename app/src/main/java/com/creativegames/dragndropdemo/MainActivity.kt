@@ -17,7 +17,7 @@ class MainActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        for (i in 1..1) {
+        for (i in 1..5) {
             val pawn = Pawn(this)
             main_view.addView(pawn)
             pawn.setOnTouchListener(TouchListener())

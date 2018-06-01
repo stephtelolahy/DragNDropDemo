@@ -6,10 +6,14 @@ import android.graphics.Paint
 import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.abs
 import kotlin.math.min
 
 
 class BoardView : View {
+
+    private val mPaint = Paint()
+    private var P = ArrayList<PointF>()
 
     @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null) : super(context, attrs) {
         commonInit(attrs)
@@ -18,16 +22,6 @@ class BoardView : View {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
         commonInit(attrs)
     }
-
-    fun validTarget(view: View, x: Float, y: Float): PointF? {
-        if (x > 100 && x < 500 && y > 100 && y < 500) {
-            return PointF(500f - view.width / 2, 500f - view.height / 2)
-        }
-        return null
-    }
-
-    private val mPaint = Paint()
-    private lateinit var mPawnLocations: Array<PawnLocation>
 
     private fun commonInit(attrs: AttributeSet?) {
         val attributes = context.theme.obtainStyledAttributes(
@@ -44,37 +38,34 @@ class BoardView : View {
         }
 
         mPaint.strokeWidth = 4f
+    }
 
-        /*
-        val row1: Array<String> = arrayOf("Hi", "are", "you")
-        val row2: Array<String> = arrayOf("Hi", "are", "you")
-        val grid: Array<Array<String>> = arrayOf(row1, row2)
-        val element = grid[0][0]
-        */
+    override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
+        val margin = 100f
+        val W = min(w, h) - 2 * margin
+        val Ox = margin
+        val Oy = margin
+        P.clear()
+        P.add(PointF(Ox, Oy))
+        P.add(PointF(Ox + W, Oy))
+        P.add(PointF(Ox, Oy + W))
+        P.add(PointF(Ox + W, Oy + W))
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
 
-        val margin = 100f
-        val W = min(width, height) - 2 * margin
-        val Ox = margin
-        val Oy = margin
+        canvas?.drawLine(P[0], P[1], mPaint)
+        canvas?.drawLine(P[1], P[3], mPaint)
+        canvas?.drawLine(P[3], P[2], mPaint)
+        canvas?.drawLine(P[2], P[0], mPaint)
+        canvas?.drawLine(P[0], P[3], mPaint)
+        canvas?.drawLine(P[1], P[2], mPaint)
+    }
 
-        val A = PointF(Ox, Oy)
-        val B = PointF(Ox + W, Oy)
-        val C = PointF(Ox, Oy + W)
-        val D = PointF(Ox + W, Oy + W)
-
-        //A  B
-        //C  D
-
-        canvas?.drawLine(A, B, mPaint)
-        canvas?.drawLine(B, D, mPaint)
-        canvas?.drawLine(D, C, mPaint)
-        canvas?.drawLine(C, A, mPaint)
-        canvas?.drawLine(A, D, mPaint)
-        canvas?.drawLine(B, C, mPaint)
+    fun validTarget(view: View, x: Float, y: Float): PointF? {
+        return P.firstOrNull { abs(x - it.x) < view.width && abs(y - it.y) < view.height }
     }
 }
 

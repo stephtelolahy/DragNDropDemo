@@ -29,7 +29,8 @@ class Pawn : ImageView {
         visibility = View.INVISIBLE
     }
 
-    fun dropAt(point: PointF) {
+    fun dropAt(center: PointF) {
+        val point = PointF(center.x - width / 2, center.y - height / 2)
         setPosition(point)
         visibility = View.VISIBLE
     }
