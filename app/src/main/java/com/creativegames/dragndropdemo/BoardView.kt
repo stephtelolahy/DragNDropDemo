@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Point
+import android.graphics.PointF
 import android.util.AttributeSet
 import android.view.View
 
@@ -18,9 +19,16 @@ class BoardView : View {
         commonInit(attrs)
     }
 
+    fun validTarget(view: View, x: Float, y: Float): PointF? {
+        if (x > 100 && x < 500 && y > 100 && y < 500) {
+            return PointF(500f - view.width / 2, 500f - view.height / 2)
+        }
+        return null
+    }
+
     private val mPaint = Paint()
     private lateinit var mPawnLocations: Array<PawnLocation>
- 
+
     private fun commonInit(attrs: AttributeSet?) {
         val attributes = context.theme.obtainStyledAttributes(
                 attrs,
@@ -39,7 +47,6 @@ class BoardView : View {
 
         val offset = Point(100, 100)
         val sideWidth = 100
-
 
 
         val row1: Array<String> = arrayOf("Hi", "are", "you")
